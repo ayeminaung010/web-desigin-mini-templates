@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+.container{
+    width: 1080px;
+    margin: 0 auto;
+}
+table.blueTable {
+  border: 1px solid #020304;
+  background-color: #EEEEEE;
+  width: 100%;
+  text-align: center;
+  border-collapse: collapse;
+}
+table.blueTable td, table.blueTable th {
+  border: 1px solid #AAAAAA;
+  padding: 3px 2px;
+}
+table.blueTable tbody td {
+  font-size: 13px;
+}
+
+table.blueTable thead th {
+  font-size: 15px;
+  font-weight: bold;
+  color: #FFFFFF;
+  border-left: 2px solid #D0E4F5;
+  background-color:  black;
+}
+.api_image{
+    width: 150px;
+    height: 100px;
+    border: 2px solid whitesmoke;
+}
+table tbody tr:hover{
+    background-color: lightblue;
+}
+.card{
+    display: flex;
+    justify-content: center;
+}
+.card-data{
+    border: 2px solid grey;
+   
+    width: 500px;
+    height: 200px;
+    display: flex;
+    justify-content: space-between;
+    box-sizing: 1px 1px 10px black;
+}
+.card_image{
+    width: 250px;
+    margin-right: 25px;
+    
+}
+.info{
+    margin-right: 30px;
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card" id="card">
+            <div class="card-data">
+                <img src="" alt="" class="card_image">
+                <div class="info">
+                    <h3> </h3>
+                    <h4></h4>
+                    <h4></h4>
+                </div>
+            </div>
+        </div>
+        <table class="blueTable">
+            <thead>
+            <tr >
+            <th>ID</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Rating</th>
+            <th>Image</th>
+            </tr>
+            </thead>
+            <tbody id="page">
+                
+            </tbody>
+        </table>
+    </div>
+    
+</body>
+<script>
+    let page = document.getElementById("page");
+    let list = "";
+    let card = document.getElementById("card");
+    card.style.display = " none";
+    //fetch 
+    fetch("https://fakestoreapi.com/products")
+    .then((response) => response.json())
+    .then((result) => {
+        
+        for (let i = 0 ; i < result.length ; i++){
+            list += ` <tr onclick="detail(${result[i].id})">
+                <td>${result[i].id}</td>
+                <td>${result[i].title}</td>
+                <td>${result[i].price}</td>
+                <td>${result[i].rating.rate}</td>
+                <td>
+                    <a href="${result[i].image}" target="_blink"><img src="${result[i].image}" class="api_image" alt=""></a>
+                </td>
+             </tr>`
+        }
+        page.innerHTML = list;
+    });
+
+    function detail(id){
+        
+        fetch("https://fakestoreapi.com/products/" + id).then((response) => response.json()).then((data) => {
+            
+            card.innerHTML = 
+            `<div class="card-data">
+                <img src="${data.image}" alt="" class="card_image">
+                <div class="info">
+                    <h3>${data.title} </h3>
+                    <h4>${data.price}</h4>
+                    <h4>${data.rating.rate}</h4>
+                </div>
+            </div>`
+            card.style.display = "block";
+        })
+        
+    }
+
+    
+</script>
+</html>
